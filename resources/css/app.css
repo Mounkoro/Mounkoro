@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #0056b3;
+    --color-primary-dark: #004494;
+    --color-secondary: #f8f9fa;
+}
+
+.transition-all { transition: all 0.3s ease; }
+.hover-scale:hover { transform: scale(1.02); }
