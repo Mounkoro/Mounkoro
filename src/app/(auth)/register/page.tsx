@@ -6,7 +6,8 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import { Zap, User, HardHat } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -74,27 +75,35 @@ export default function RegisterPage() {
             required
           />
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Vous êtes :</label>
-            <div className="flex gap-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  value="CLIENT"
-                  checked={formData.role === "CLIENT"}
-                  onChange={(e) => setFormData({...formData, role: e.target.value})}
-                />
-                <span>Client</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  value="ENGINEER"
-                  checked={formData.role === "ENGINEER"}
-                  onChange={(e) => setFormData({...formData, role: e.target.value})}
-                />
-                <span>Ingénieur</span>
-              </label>
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-gray-700">Choisissez votre profil :</label>
+            <div className="grid grid-cols-2 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setFormData({ ...formData, role: "CLIENT" })}
+                className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center space-y-2 ${
+                  formData.role === "CLIENT"
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-gray-100 bg-white text-gray-500 hover:border-gray-200"
+                }`}
+              >
+                <User className="h-8 w-8 mx-auto" />
+                <p className="font-bold text-sm">Client</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setFormData({ ...formData, role: "ENGINEER" })}
+                className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center space-y-2 ${
+                  formData.role === "ENGINEER"
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-gray-100 bg-white text-gray-500 hover:border-gray-200"
+                }`}
+              >
+                <HardHat className="h-8 w-8 mx-auto" />
+                <p className="font-bold text-sm">Ingénieur</p>
+              </motion.div>
             </div>
           </div>
 

@@ -1,11 +1,36 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { TrendingUp, Users, Calendar, FileText, Plus } from "lucide-react";
+import { TrendingUp, Users, Calendar, FileText, Plus, Bell, X } from "lucide-react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function EngineerDashboard() {
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await fetch("/api/notifications");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > notifications.length) {
+            setShowAlert(true);
+          }
+          setNotifications(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch notifications");
+      }
+    };
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 10000); // Poll every 10s
+    return () => clearInterval(interval);
+  }, [notifications.length]);
   const stats = [
     { label: "Revenus (Mois)", value: "4,250 €", icon: TrendingUp, color: "text-green-500" },
     { label: "Clients Actifs", value: "8", icon: Users, color: "text-blue-500" },
@@ -14,7 +39,37 @@ export default function EngineerDashboard() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 relative">
+      <AnimatePresence>
+        {showAlert && notifications.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed top-20 right-4 z-50 w-full max-w-sm"
+          >
+            <div className="bg-primary text-white p-4 rounded-2xl shadow-2xl border-4 border-white flex items-start gap-4 animate-pulsate">
+              <div className="bg-white/20 p-2 rounded-full">
+                <Bell className="h-6 w-6 animate-bounce" />
+              </div>
+              <div className="flex-1">
+                <p className="font-bold">Nouvelle Mission !</p>
+                <p className="text-sm text-white/90">
+                  {notifications[0].type === "EMERGENCY" ? "🚨 Urgence :" : "📋 Demande :"} {notifications[0].description.substring(0, 40)}...
+                </p>
+                <div className="mt-2 flex gap-2">
+                  <Button size="sm" variant="secondary" className="bg-white text-primary border-none hover:bg-gray-100" onClick={() => setShowAlert(false)}>
+                    Voir
+                  </Button>
+                </div>
+              </div>
+              <button onClick={() => setShowAlert(false)} className="hover:bg-white/10 p-1 rounded">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Espace Ingénieur</h1>

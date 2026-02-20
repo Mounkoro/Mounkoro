@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Plus, Trash, FileText, Euro } from "lucide-react";
+import { Plus, Trash, FileText, Euro, Download, Loader2 } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export default function NewInvoicePage() {
   const [items, setItems] = useState([{ description: "", price: 0 }]);
   const [clientId, setClientId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const router = useRouter();
 
   const addItem = () => setItems([...items, { description: "", price: 0 }]);
@@ -28,12 +30,36 @@ export default function NewInvoicePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // API call would go here
-    setTimeout(() => {
-      alert("Facture générée avec succès (Simulation)");
-      router.push("/engineer/dashboard");
+    setDownloading(true);
+
+    try {
+      const res = await fetch("/api/invoices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientId, items, total }),
+      });
+
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `facture-${Date.now()}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        router.push("/engineer/dashboard");
+      } else {
+        const data = await res.json();
+        alert(data.error || "Erreur lors de la génération");
+      }
+    } catch (err) {
+      alert("Erreur réseau");
+    } finally {
       setLoading(false);
-    }, 1500);
+      setDownloading(false);
+    }
   };
 
   return (
@@ -96,8 +122,18 @@ export default function NewInvoicePage() {
 
           <div className="flex justify-end gap-4">
             <Button type="button" variant="secondary" onClick={() => router.back()}>Annuler</Button>
-            <Button type="submit" disabled={loading} className="px-8">
-              {loading ? "Génération..." : "Générer la Facture"}
+            <Button type="submit" disabled={loading} className="px-8 flex items-center gap-2 relative overflow-hidden">
+              {downloading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Génération PDF...
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4 group-hover:translate-y-1 transition-transform" />
+                  Générer le PDF
+                </>
+              )}
             </Button>
           </div>
         </form>
