@@ -100,10 +100,11 @@ export default function NewRequestPage() {
                 onChange={(e) => setFormData({...formData, location: e.target.value})}
                 required
               />
-              <Button type="button" variant="outline" onClick={handleGetLocation} disabled={geoLoading}>
-                <MapPin className={`h-4 w-4 ${geoLoading ? "animate-bounce" : ""}`} />
+              <Button type="button" variant="outline" onClick={handleGetLocation} disabled={geoLoading} title="Trouver ma position">
+                <MapPin className={`h-4 w-4 ${geoLoading ? "animate-pulsate text-primary" : ""}`} />
               </Button>
             </div>
+            <p className="text-xs text-gray-500 italic">Cliquez sur l'icône pour utiliser votre position actuelle.</p>
           </div>
 
           <div className="space-y-2">
@@ -115,8 +116,9 @@ export default function NewRequestPage() {
             </div>
           </div>
 
-          <Button className="w-full h-12 text-lg" type="submit" disabled={loading}>
-            {loading ? "Envoi en cours..." : "Envoyer la demande"}
+          <Button className="w-full h-14 text-lg font-bold flex items-center justify-center gap-2" type="submit" disabled={loading}>
+            <Zap className={`h-5 w-5 ${loading ? "animate-pulse" : ""}`} />
+            {loading ? "Recherche en cours..." : "Trouver une pointe d'expertise"}
           </Button>
         </form>
       </Card>

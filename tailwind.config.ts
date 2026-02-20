@@ -10,14 +10,16 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#0056b3",
-          light: "#3378c2",
-          dark: "#004494",
+          DEFAULT: "#00A8E8",
+          light: "#33C0F0",
+          dark: "#0086BA",
         },
         secondary: {
           DEFAULT: "#f8f9fa",
           dark: "#e9ecef",
         },
+        dark: "#1A1A1A",
+        accent: "#8B5E3C",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

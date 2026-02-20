@@ -8,7 +8,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col items-center"
+    >
       {/* Hero Section */}
       <section className="w-full py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto text-center space-y-8">
@@ -45,7 +49,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="max-w-7xl mx-auto py-20 px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="max-w-7xl mx-auto py-20 px-4 grid grid-cols-1 md:grid-cols-3 gap-8 overflow-hidden">
         <Card className="text-center space-y-4">
           <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto text-primary">
             <Shield className="h-6 w-6" />
@@ -68,6 +72,6 @@ export default function Home() {
           <p className="text-gray-600">Devis clairs et détaillés avant chaque intervention.</p>
         </Card>
       </section>
-    </div>
+    </motion.div>
   );
 }

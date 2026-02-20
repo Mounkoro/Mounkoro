@@ -12,10 +12,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", ...props }, ref) => {
     const variants = {
-      primary: "bg-primary text-white hover:bg-primary-dark",
-      secondary: "bg-secondary text-primary hover:bg-secondary-dark",
-      outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
-      danger: "bg-red-500 text-white hover:bg-red-600",
+      primary: "bg-primary text-white hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20",
+      secondary: "bg-secondary text-primary hover:bg-secondary-dark hover:shadow-md",
+      outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/10",
+      danger: "bg-red-500 text-white hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/20",
     };
 
     const sizes = {
@@ -26,8 +26,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.03, y: -2 }}
+        whileTap={{ scale: 0.97 }}
         ref={ref}
         className={cn(
           "rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",

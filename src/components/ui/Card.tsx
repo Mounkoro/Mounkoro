@@ -15,10 +15,12 @@ export function Card({ children, className, animate = true }: CardProps) {
 
   return (
     <Component
-      initial={animate ? { opacity: 0, y: 20 } : undefined}
-      animate={animate ? { opacity: 1, y: 0 } : undefined}
+      initial={animate ? { opacity: 0, y: 30 } : undefined}
+      whileInView={animate ? { opacity: 1, y: 0 } : undefined}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className={cn(
-        "bg-white rounded-xl shadow-sm border border-gray-100 p-6",
+        "bg-white rounded-xl shadow-sm border border-accent/20 p-6",
         className
       )}
     >
